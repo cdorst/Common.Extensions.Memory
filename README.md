@@ -27,7 +27,7 @@ This project is published as a NuGet package at [https://www.nuget.org/packages/
 
 ## Version
 
-1.0.1-rc1
+1.0.2-rc1
 
 ## Usage Notes
 
@@ -67,11 +67,11 @@ Use the static `IntegerReadOnlySpanByteMapMapper` class to concatenate integer b
 ```csharp
 using static Common.Extensions.Memory.IntegerReadOnlySpanByteMapMapper;
 
-var seventeenBytes = GetSpan(
+var fifteenBytes = GetSpan(
     byte.MaxValue, /* 1 byte */
     new Int16ByteMap(short.MaxValue), /* 2 bytes */
     new Int32ByteMap(int.MaxValue), /* 4 bytes */
-    new Int64ByteMap(long.MaxValue) /* 8 bytes */); //  1+2+4+8 = 17
+    new Int64ByteMap(long.MaxValue) /* 8 bytes */); //  1+2+4+8 = 15
 ```
 
 Use the static `IntegerReadOnlySpanMapper` class to concatenate integers as memory
@@ -79,9 +79,9 @@ Use the static `IntegerReadOnlySpanMapper` class to concatenate integers as memo
 ```csharp
 using static Common.Extensions.Memory.IntegerReadOnlySpanMapper;
 
-var seventeenBytes = MapSpan(
+var fifteenBytes = MapSpan(
     byte.MaxValue, /* 1 byte */
     short.MaxValue, /* 2 bytes */
     int.MaxValue, /* 4 bytes */
-    long.MaxValue /* 8 bytes */); //  1+2+4+8 = 17
+    long.MaxValue /* 8 bytes */); //  1+2+4+8 = 15
 ```
