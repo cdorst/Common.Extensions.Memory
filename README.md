@@ -85,3 +85,27 @@ var fifteenBytes = MapSpan(
     int.MaxValue, /* 4 bytes */
     long.MaxValue /* 8 bytes */); //  1+2+4+8 = 15
 ```
+
+Use the `IntegerReadOnlyMemoryByteMapMapper.GetMemory` and `IntegerReadOnlyMemoryMapper.MapMemory` APIs similarly to their `Span` counterparts whenever `ReadOnlyMemory<byte>` is preferred over `ReadOnlySpan<byte>`.
+
+```csharp
+using static Common.Extensions.Memory.IntegerReadOnlyMemoryMapper;
+var memory = MapMemory(
+	int.MaxValue, 
+	short.MaxValue, 
+	short.MaxValue, 
+	long.MaxValue);
+
+[Flags] enum FlagsByte : byte { Foo, Bar }
+class MyEntityType
+{
+    public int PrimaryKey { get; set; }
+    public short ForeignKey1 { get; set; }
+    public long ForeignKey2 { get; set; }
+    public int ForeignKey3 { get; set; }
+    public FlagsByte Flags { get; set; }
+
+    public ReadOnlyMemory<byte> GetHttpApiBytesPayload()
+        => MapMemory(ForeignKey1, ForeignKey2, ForeignKey3, Flags);
+}
+```

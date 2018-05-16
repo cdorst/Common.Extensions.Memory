@@ -8,11 +8,103 @@ namespace Jigs
     {
         static void Main(string[] args)
         {
+            MakeMemoryByteMapMapperCode();
             MakeSpanByteMapMapperCode();
+            MakeMemoryMapperCode();
             MakeSpanMapperCode();
             MakeTestData();
+            MakeIntegerReadOnlyMemoryMapper_MapMemory_Tests();
             MakeIntegerReadOnlySpanMapper_MapSpan_Tests();
+            MakeIntegerReadOnlyMemoryByteMapMapper_GetMemory_Tests();
             MakeIntegerReadOnlySpanByteMapMapper_GetSpan_Tests();
+        }
+
+        private static void MakeMemoryByteMapMapperCode()
+        {
+            var sb = new StringBuilder();
+            foreach (var item in IntegerTypeCombinations.GetDoubles())
+            {
+                var (item0, item1) = item;
+                sb.AppendLine("public static ReadOnlyMemory<byte> GetMemory(")
+                    .AppendLine($"\tin {GetIntMapType(item0)} item0,")
+                    .AppendLine($"\tin {GetIntMapType(item1)} item1)")
+                    .AppendLine("\t=> new[]")
+                    .AppendLine("\t{");
+                AppendBytes(sb, item0, 0);
+                AppendBytes(sb, item1, 1, false);
+                sb.AppendLine("\t};")
+                    .AppendLine();
+            }
+            foreach (var item in IntegerTypeCombinations.GetTriples())
+            {
+                var (item0, item1, item2) = item;
+                sb.AppendLine("public static ReadOnlyMemory<byte> GetMemory(")
+                    .AppendLine($"\tin {GetIntMapType(item0)} item0,")
+                    .AppendLine($"\tin {GetIntMapType(item1)} item1,")
+                    .AppendLine($"\tin {GetIntMapType(item2)} item2)")
+                    .AppendLine("\t=> new[]")
+                    .AppendLine("\t{");
+                AppendBytes(sb, item0, 0);
+                AppendBytes(sb, item1, 1);
+                AppendBytes(sb, item2, 2, false);
+                sb.AppendLine("\t};")
+                    .AppendLine();
+            }
+            foreach (var item in IntegerTypeCombinations.GetQuadruples())
+            {
+                var (item0, item1, item2, item3) = item;
+                sb.AppendLine("public static ReadOnlyMemory<byte> GetMemory(")
+                    .AppendLine($"\tin {GetIntMapType(item0)} item0,")
+                    .AppendLine($"\tin {GetIntMapType(item1)} item1,")
+                    .AppendLine($"\tin {GetIntMapType(item2)} item2,")
+                    .AppendLine($"\tin {GetIntMapType(item3)} item3)")
+                    .AppendLine("\t=> new[]")
+                    .AppendLine("\t{");
+                AppendBytes(sb, item0, 0);
+                AppendBytes(sb, item1, 1);
+                AppendBytes(sb, item2, 2);
+                AppendBytes(sb, item3, 3, false);
+                sb.AppendLine("\t};")
+                    .AppendLine();
+            }
+            File.WriteAllText("IntegerReadOnlyMemoryByteMapMapper.cs.txt", sb.ToString().Replace("\r\n,", ",\r\n"));
+
+            void AppendBytes(in StringBuilder builder, in IntegerTypes type, in byte position, in bool appendComma = true, in byte tabCount = 4)
+            {
+                var tabs = new string('\t', tabCount);
+                var prefix = string.Concat(tabs, "item", position);
+                if (type == IntegerTypes.Byte)
+                {
+                    sb.AppendLine(prefix);
+                    if (appendComma) sb.Append(",");
+                }
+                else
+                {
+                    AppendByteLine(sb, prefix, 0);
+                    AppendByteLine(sb, prefix, 1, appendComma);
+                    if (type != IntegerTypes.Short)
+                    {
+                        if (!appendComma) sb.Append(",");
+                        AppendByteLine(sb, prefix, 2);
+                        AppendByteLine(sb, prefix, 3, appendComma);
+                        if (type == IntegerTypes.Long)
+                        {
+                            if (!appendComma) sb.Append(",");
+                            AppendByteLine(sb, prefix, 4);
+                            AppendByteLine(sb, prefix, 5);
+                            AppendByteLine(sb, prefix, 6);
+                            AppendByteLine(sb, prefix, 7, appendComma);
+                        }
+                    }
+                }
+            }
+            void AppendByteLine(in StringBuilder builder, in string prefix, in byte position, in bool appendComma = true)
+                => sb.AppendLine(string.Concat(prefix, Byte(position), appendComma ? "," : string.Empty));
+            string Byte(in byte position) => string.Concat(".Byte", position);
+            string GetIntMapType(in IntegerTypes type)
+                => type == IntegerTypes.Short ? "Int16ByteMap"
+                : type == IntegerTypes.Int ? "Int32ByteMap"
+                : type == IntegerTypes.Long ? "Int64ByteMap" : "byte";
         }
 
         private static void MakeSpanByteMapMapperCode()
@@ -101,6 +193,50 @@ namespace Jigs
                 => type == IntegerTypes.Short ? "Int16ByteMap"
                 : type == IntegerTypes.Int ? "Int32ByteMap"
                 : type == IntegerTypes.Long ? "Int64ByteMap" : "byte";
+        }
+
+        private static void MakeMemoryMapperCode()
+        {
+            var sb = new StringBuilder();
+            foreach (var item in IntegerTypeCombinations.GetDoubles())
+            {
+                var (item0, item1) = item;
+                sb.AppendLine("public static ReadOnlyMemory<byte> MapMemory(")
+                    .AppendLine($"\tin {GetIntType(item0)} item0,")
+                    .AppendLine($"\tin {GetIntType(item1)} item1)")
+                    .AppendLine($"\t=> GetMemory({GetMapArg(item0, 0)}, {GetMapArg(item1, 1)});")
+                    .AppendLine();
+            }
+            foreach (var item in IntegerTypeCombinations.GetTriples())
+            {
+                var (item0, item1, item2) = item;
+                sb.AppendLine("public static ReadOnlyMemory<byte> MapMemory(")
+                    .AppendLine($"\tin {GetIntType(item0)} item0,")
+                    .AppendLine($"\tin {GetIntType(item1)} item1,")
+                    .AppendLine($"\tin {GetIntType(item2)} item2)")
+                    .AppendLine($"\t=> GetMemory({GetMapArg(item0, 0)}, {GetMapArg(item1, 1)}, {GetMapArg(item2, 2)});")
+                    .AppendLine();
+            }
+            foreach (var item in IntegerTypeCombinations.GetQuadruples())
+            {
+                var (item0, item1, item2, item3) = item;
+                sb.AppendLine("public static ReadOnlyMemory<byte> MapMemory(")
+                    .AppendLine($"\tin {GetIntType(item0)} item0,")
+                    .AppendLine($"\tin {GetIntType(item1)} item1,")
+                    .AppendLine($"\tin {GetIntType(item2)} item2,")
+                    .AppendLine($"\tin {GetIntType(item3)} item3)")
+                    .AppendLine($"\t=> GetMemory({GetMapArg(item0, 0)}, {GetMapArg(item1, 1)}, {GetMapArg(item2, 2)}, {GetMapArg(item3, 3)});")
+                    .AppendLine();
+            }
+            string GetIntType(IntegerTypes type)
+                => type == IntegerTypes.Short ? "Int16"
+                : type == IntegerTypes.Int ? "Int32"
+                : type == IntegerTypes.Long ? "Int64" : "byte";
+            string GetMapArg(IntegerTypes type, byte position)
+                => type == IntegerTypes.Byte
+                    ? $"item{position}"
+                    : $"Map(item{position})";
+            File.WriteAllText("IntegerReadOnlyMemoryMapper.cs.txt", sb.ToString().Replace("\r\n,", ",\r\n"));
         }
 
         private static void MakeSpanMapperCode()
@@ -313,6 +449,72 @@ namespace Jigs
             File.WriteAllText("OverloadTestData.cs.txt", sb.ToString().Replace("\r\n,", ",\r\n"));
         }
 
+        private static void MakeIntegerReadOnlyMemoryMapper_MapMemory_Tests()
+        {
+            var sb = new StringBuilder()
+                .AppendLine("using System;")
+                .AppendLine("using Tests.Data;")
+                .AppendLine("using Xunit;")
+                .AppendLine("using static Common.Extensions.Memory.IntegerReadOnlyMemoryMapper;")
+                .AppendLine("using static Tests.Assertions.ByteArrayEqualityAssertor;")
+                .AppendLine()
+                .AppendLine("namespace Tests")
+                .AppendLine("{")
+                .AppendLine($"\tpublic class IntegerReadOnlyMemoryMapper_MapMemory")
+                .AppendLine("\t{");
+
+            var overloadNumber = 1;
+            foreach (var item in IntegerTypeCombinations.GetDoubles())
+            {
+                var (item0, item1) = item;
+                var type0 = GetIntType(item0);
+                var type1 = GetIntType(item1);
+                sb.AppendLine("\t\t[Theory]")
+                    .AppendLine($"\t\t[ClassData(typeof(OverloadTestData_{overloadNumber}))]")
+                    .AppendLine($"\t\tpublic void MapMemory_produces_equivalent_array_as_control_{overloadNumber}({type0} value0, {type1} value1, byte[] control)")
+                    .AppendLine("\t\t\t=> AssertEqual(control, MapMemory(value0, value1).ToArray());")
+                    .AppendLine();
+                overloadNumber++;
+            }
+            foreach (var item in IntegerTypeCombinations.GetTriples())
+            {
+                var (item0, item1, item2) = item;
+                var type0 = GetIntType(item0);
+                var type1 = GetIntType(item1);
+                var type2 = GetIntType(item2);
+                sb.AppendLine("\t\t[Theory]")
+                    .AppendLine($"\t\t[ClassData(typeof(OverloadTestData_{overloadNumber}))]")
+                    .AppendLine($"\t\tpublic void MapMemory_produces_equivalent_array_as_control_{overloadNumber}({type0} value0, {type1} value1, {type2} value2, byte[] control)")
+                    .AppendLine("\t\t\t=> AssertEqual(control, MapMemory(value0, value1, value2).ToArray());")
+                    .AppendLine();
+                overloadNumber++;
+            }
+            foreach (var item in IntegerTypeCombinations.GetQuadruples())
+            {
+                var (item0, item1, item2, item3) = item;
+                var type0 = GetIntType(item0);
+                var type1 = GetIntType(item1);
+                var type2 = GetIntType(item2);
+                var type3 = GetIntType(item3);
+                sb.AppendLine("\t\t[Theory]")
+                    .AppendLine($"\t\t[ClassData(typeof(OverloadTestData_{overloadNumber}))]")
+                    .AppendLine($"\t\tpublic void MapMemory_produces_equivalent_array_as_control_{overloadNumber}({type0} value0, {type1} value1, {type2} value2, {type3} value3, byte[] control)")
+                    .AppendLine("\t\t\t=> AssertEqual(control, MapMemory(value0, value1, value2, value3).ToArray());");
+                if (new[] { item0, item1, item2, item3 }.Any(type => type != IntegerTypes.Long))
+                    sb.AppendLine();
+                overloadNumber++;
+            }
+            string GetIntType(IntegerTypes type)
+                => type == IntegerTypes.Short ? "Int16"
+                : type == IntegerTypes.Int ? "Int32"
+                : type == IntegerTypes.Long ? "Int64" : "byte";
+
+            sb.AppendLine("\t}")
+                .AppendLine("}");
+
+            File.WriteAllText("IntegerReadOnlyMemoryMapper_MapMemory.cs.txt", sb.ToString());
+        }
+
         private static void MakeIntegerReadOnlySpanMapper_MapSpan_Tests()
         {
             var sb = new StringBuilder()
@@ -377,6 +579,85 @@ namespace Jigs
                 .AppendLine("}");
 
             File.WriteAllText("IntegerReadOnlySpanMapper_MapSpan.cs.txt", sb.ToString());
+        }
+
+        private static void MakeIntegerReadOnlyMemoryByteMapMapper_GetMemory_Tests()
+        {
+            var sb = new StringBuilder()
+                .AppendLine("using Common.Extensions.Memory;")
+                .AppendLine("using System;")
+                .AppendLine("using Tests.Data;")
+                .AppendLine("using Xunit;")
+                .AppendLine("using static Common.Extensions.Memory.IntegerReadOnlyMemoryByteMapMapper;")
+                .AppendLine("using static Tests.Assertions.ByteArrayEqualityAssertor;")
+                .AppendLine()
+                .AppendLine("namespace Tests")
+                .AppendLine("{")
+                .AppendLine($"\tpublic class IntegerReadOnlyMemoryByteMapMapper_GetMemory")
+                .AppendLine("\t{");
+
+            var overloadNumber = 1;
+            foreach (var item in IntegerTypeCombinations.GetDoubles())
+            {
+                var (item0, item1) = item;
+                var type0 = GetIntType(item0);
+                var type1 = GetIntType(item1);
+                var value0 = GetValueType(0, type0);
+                var value1 = GetValueType(1, type1);
+                sb.AppendLine("\t\t[Theory]")
+                    .AppendLine($"\t\t[ClassData(typeof(OverloadTestData_{overloadNumber}))]")
+                    .AppendLine($"\t\tpublic void GetMemory_produces_equivalent_array_as_control_{overloadNumber}({type0} value0, {type1} value1, byte[] control)")
+                    .AppendLine($"\t\t\t=> AssertEqual(control, GetMemory({value0}, {value1}).ToArray());")
+                    .AppendLine();
+                overloadNumber++;
+            }
+            foreach (var item in IntegerTypeCombinations.GetTriples())
+            {
+                var (item0, item1, item2) = item;
+                var type0 = GetIntType(item0);
+                var type1 = GetIntType(item1);
+                var type2 = GetIntType(item2);
+                var value0 = GetValueType(0, type0);
+                var value1 = GetValueType(1, type1);
+                var value2 = GetValueType(2, type2);
+                sb.AppendLine("\t\t[Theory]")
+                    .AppendLine($"\t\t[ClassData(typeof(OverloadTestData_{overloadNumber}))]")
+                    .AppendLine($"\t\tpublic void GetMemory_produces_equivalent_array_as_control_{overloadNumber}({type0} value0, {type1} value1, {type2} value2, byte[] control)")
+                    .AppendLine($"\t\t\t=> AssertEqual(control, GetMemory({value0}, {value1}, {value2}).ToArray());")
+                    .AppendLine();
+                overloadNumber++;
+            }
+            foreach (var item in IntegerTypeCombinations.GetQuadruples())
+            {
+                var (item0, item1, item2, item3) = item;
+                var type0 = GetIntType(item0);
+                var type1 = GetIntType(item1);
+                var type2 = GetIntType(item2);
+                var type3 = GetIntType(item3);
+                var value0 = GetValueType(0, type0);
+                var value1 = GetValueType(1, type1);
+                var value2 = GetValueType(2, type2);
+                var value3 = GetValueType(3, type3);
+                sb.AppendLine("\t\t[Theory]")
+                    .AppendLine($"\t\t[ClassData(typeof(OverloadTestData_{overloadNumber}))]")
+                    .AppendLine($"\t\tpublic void GetMemory_produces_equivalent_array_as_control_{overloadNumber}({type0} value0, {type1} value1, {type2} value2, {type3} value3, byte[] control)")
+                    .AppendLine($"\t\t\t=> AssertEqual(control, GetMemory({value0}, {value1}, {value2}, {value3}).ToArray());");
+                if (new[] { item0, item1, item2, item3 }.Any(type => type != IntegerTypes.Long))
+                    sb.AppendLine();
+                overloadNumber++;
+            }
+            string GetIntType(IntegerTypes type)
+                => type == IntegerTypes.Short ? "Int16"
+                : type == IntegerTypes.Int ? "Int32"
+                : type == IntegerTypes.Long ? "Int64" : "byte";
+            string GetValueType(byte position, string type)
+                => type == "byte" ? string.Concat("value", position)
+                    : string.Concat("new ", type, "ByteMap(value", position, ")");
+
+            sb.AppendLine("\t}")
+                .AppendLine("}");
+
+            File.WriteAllText("IntegerReadOnlyMemoryByteMapMapper_GetMemory.cs.txt", sb.ToString());
         }
 
         private static void MakeIntegerReadOnlySpanByteMapMapper_GetSpan_Tests()
