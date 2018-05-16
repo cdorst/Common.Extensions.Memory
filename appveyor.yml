@@ -1,4 +1,4 @@
-version: 1.0.0-rc1-{branch}-{build}
+version: 1.0.1-rc1-{branch}-{build}
 image: Visual Studio 2017 Preview
 environment:
   AZURE_STORAGE_CONNECTION_STRING:

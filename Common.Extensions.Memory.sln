@@ -14,6 +14,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FD78CC2A-DBFD-40DD-A26A-A21FBFB7310B}"
 	ProjectSection(SolutionItems) = preProject
 		appveyor.yml = appveyor.yml
+		global.json = global.json
 		LICENSE = LICENSE
 		nuget.config = nuget.config
 	EndProjectSection
