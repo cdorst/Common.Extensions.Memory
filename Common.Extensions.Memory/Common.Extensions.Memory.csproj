@@ -1,7 +1,25 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <LangVersion>latest</LangVersion>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <Authors>cdorst</Authors>
+    <Copyright>Copyright © Christopher Dorst</Copyright>
+    <Description>Extensions for representing integers as memory</Description>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageIconUrl>https://cdorst-dev.azureedge.net/nuget/package-icon-64.png</PackageIconUrl>
+    <PackageId>CDorst.Common.Extensions.Memory</PackageId>
+    <PackageLicenseUrl>https://github.com/cdorst/Common.Extensions.Memory/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/cdorst/Common.Extensions.Memory</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/cdorst/Common.Extensions.Memory</RepositoryUrl>
+    <Version>1.0.0</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Memory" Version="4.5.0-rc1" />
+  </ItemGroup>
 
 </Project>
