@@ -1,5 +1,5 @@
 version: 1.0.0-{branch}-{build}
-image: Visual Studio 2017
+image: Visual Studio 2017 Preview
 environment:
   AZURE_STORAGE_CONNECTION_STRING:
     secure: wXeUzfFewte+1JATay7ldiN4KnNRsGaOr8CTCWE/XApGY2A6B7V4B8JNyqysfGnB9Cbuv8IRdFWlo3FfG9/KkdWhixL/1ifSLMNRK1nQUaQc9xxt2lb8YvClD0XRIGmwuO0R41tsdQLPi5cKYR53kiJwzmWrHAo/d1EIKQgOxjg2+iAwmIBNZAqmng4dj4V+eX2twzGiM9YMEtMXO49alygGzJZpjLMg7YFn933WOwmPg9npAB70PX2esl8HP3+Y
