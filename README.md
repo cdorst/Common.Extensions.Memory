@@ -27,7 +27,7 @@ This project is published as a NuGet package at [https://www.nuget.org/packages/
 
 ## Version
 
-1.1.1-rc1
+1.1.2-rc1
 
 ## Usage Notes
 
@@ -106,6 +106,6 @@ class MyEntityType
     public FlagsByte Flags { get; set; }
 
     public ReadOnlyMemory<byte> GetHttpApiBytesPayload()
-        => MapMemory(ForeignKey1, ForeignKey2, ForeignKey3, Flags);
+        => MapMemory(ForeignKey1, ForeignKey2, ForeignKey3, (byte)Flags);
 }
 ```

@@ -234,8 +234,8 @@ namespace Jigs
                 : type == IntegerTypes.Long ? "Int64" : "byte";
             string GetMapArg(IntegerTypes type, byte position)
                 => type == IntegerTypes.Byte
-                    ? $"item{position}"
-                    : $"Map(item{position})";
+                    ? $"in item{position}"
+                    : $"Map(in item{position})";
             File.WriteAllText("IntegerReadOnlyMemoryMapper.cs.txt", sb.ToString().Replace("\r\n,", ",\r\n"));
         }
 
@@ -278,8 +278,8 @@ namespace Jigs
                 : type == IntegerTypes.Long ? "Int64" : "byte";
             string GetMapArg(IntegerTypes type, byte position)
                 => type == IntegerTypes.Byte
-                    ? $"item{position}"
-                    : $"Map(item{position})";
+                    ? $"in item{position}"
+                    : $"Map(in item{position})";
             File.WriteAllText("IntegerReadOnlySpanMapper.cs.txt", sb.ToString().Replace("\r\n,", ",\r\n"));
         }
 
