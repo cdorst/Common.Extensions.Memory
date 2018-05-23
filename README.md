@@ -27,7 +27,7 @@ This project is published as a NuGet package at [https://www.nuget.org/packages/
 
 ## Version
 
-1.0.2-rc1
+1.1.1-rc1
 
 ## Usage Notes
 
@@ -45,7 +45,7 @@ var allEightBytesOf64BitIntegerAsSpan = new Int64ByteMap(long.MinValue).AsReadOn
 Use the static `IntegerByteMapper` class as convenience methods for `new Int{size}ByteMap({value})` syntax
 
 ```csharp
-using static Common.Extensions.Memory;
+using static Common.Extensions.Memory.IntegerByteMapper;
 
 var intBytes = Map(int.MaxValue).AsReadOnlySpan();
 var shortBytes = Map(short.MaxValue).AsReadOnlySpan();
