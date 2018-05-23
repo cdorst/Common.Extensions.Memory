@@ -34,13 +34,13 @@ namespace Common.Extensions.Memory
             };
 
         public static ReadOnlyMemory<byte> GetMemory(
-    in byte item0,
-    in byte item1)
-    => new[]
-    {
+            in byte item0,
+            in byte item1)
+            => new[]
+            {
                 item0,
                 item1
-    };
+            };
 
         public static ReadOnlyMemory<byte> GetMemory(
             in byte item0,
