@@ -27,7 +27,7 @@ This project is published as a NuGet package at [https://www.nuget.org/packages/
 
 ## Version
 
-1.2.0-rc1
+1.3.0
 
 ## Usage Notes
 

@@ -11,6 +11,10 @@ namespace Common.Extensions.Memory
             => new Int32ByteMap(in value).AsReadOnlySpan();
 
         public static ReadOnlySpan<byte> ToSpan(this Int64 value)
-            => new Int64ByteMap(in value).AsReadOnlySpan();
+        {
+            Span<byte> bytes = new byte[8];
+            bytes.ToInt32();
+            // => new Int64ByteMap(in value).AsReadOnlySpan();
+        }
     }
 }

@@ -25,6 +25,13 @@ namespace Common.Extensions.Memory
             Byte1 = bytes[1];
         }
 
+        public Int16ByteMap(in Span<byte> bytes)
+        {
+            Value = default;
+            Byte0 = bytes[0];
+            Byte1 = bytes[1];
+        }
+
         public ReadOnlyMemory<byte> AsReadOnlyMemory()
             => new[] {
                 Byte0,

@@ -43,6 +43,19 @@ namespace Common.Extensions.Memory
             Byte7 = bytes[7];
         }
 
+        public Int64ByteMap(in Span<byte> bytes)
+        {
+            Value = default;
+            Byte0 = bytes[0];
+            Byte1 = bytes[1];
+            Byte2 = bytes[2];
+            Byte3 = bytes[3];
+            Byte4 = bytes[4];
+            Byte5 = bytes[5];
+            Byte6 = bytes[6];
+            Byte7 = bytes[7];
+        }
+
         public ReadOnlyMemory<byte> AsReadOnlyMemory()
             => new[] {
                 Byte0,
