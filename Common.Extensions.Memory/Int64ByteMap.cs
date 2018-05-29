@@ -43,8 +43,20 @@ namespace Common.Extensions.Memory
             Byte7 = bytes[7];
         }
 
+        public ReadOnlyMemory<byte> AsReadOnlyMemory()
+            => new[] {
+                Byte0,
+                Byte1,
+                Byte2,
+                Byte3,
+                Byte4,
+                Byte5,
+                Byte6,
+                Byte7
+            };
+
         public ReadOnlySpan<byte> AsReadOnlySpan()
-            => new [] {
+            => new[] {
                 Byte0,
                 Byte1,
                 Byte2,

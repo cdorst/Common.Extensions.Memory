@@ -25,8 +25,14 @@ namespace Common.Extensions.Memory
             Byte1 = bytes[1];
         }
 
+        public ReadOnlyMemory<byte> AsReadOnlyMemory()
+            => new[] {
+                Byte0,
+                Byte1
+            };
+
         public ReadOnlySpan<byte> AsReadOnlySpan()
-            => new [] {
+            => new[] {
                 Byte0,
                 Byte1
             };
